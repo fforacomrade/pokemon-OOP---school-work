@@ -1,0 +1,82 @@
+import random
+
+class Pokemon():
+    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP): 
+        self.__name = myName
+        self.__type = myType
+        self.__weight = myWeight
+        self.__height = myHeight
+        self.__sound = mySound
+        self.__HP = myHP
+    
+    def setName(self, myName):
+        self.__name = myName
+    
+    def getName(self):
+        return self.__name
+
+    def setType(self,myType):
+        self.__type = myType
+    
+    def getType(self):
+        return self.__type
+    
+    def setWeight(self,myWeight):
+        self.__weight = myWeight
+    
+    def getWeight(self):
+        return self.__weight
+
+    def setHeight(self,myHeight):
+        self.__height = myHeight
+    
+    def getHeight(self):
+        return self.__height
+    
+    def setSound(self,mySound):
+        self.__sound = mySound
+    
+    def getSound(self):
+        return self.__sound
+    
+    def setHP(self,myHP):
+        self.__HP = myHP
+    
+    def getHP(self):
+        return self.__HP
+    
+    
+class Water(Pokemon):
+    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP):
+        super().__init__(myName, myType, myWeight, myHeight, mySound, myHP)
+        self.__name = myName
+        self.__type = myType
+        self.__weight = myWeight
+        self.__height = myHeight
+        self.__sound = mySound
+        self.__HP = myHP
+        self.__element = "Water"
+    
+    def setElement(self):
+        self.__element = "Water"
+    
+    def getElement(self):
+        return self.__element
+
+        
+
+firstPokemon = Pokemon("","","","","","")
+firstPokemon.setName("plonker")
+firstPokemon.setType("plastic")
+firstPokemon.setWeight("2lbs")
+firstPokemon.setHeight("2ft")
+firstPokemon.setSound("oong")
+
+firstWater = Water("","","","","","")
+
+
+for attribute, value in firstPokemon.__dict__.items():
+    print(attribute,value)
+
+for attribute, value in firstWater.__dict__.items():
+    print(attribute,value)
