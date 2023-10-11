@@ -1,13 +1,14 @@
 import random
 
 class Pokemon():
-    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP): 
+    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP, mySpeed): 
         self.__name = myName
         self.__type = myType
         self.__weight = myWeight
         self.__height = myHeight
         self.__sound = mySound
         self.__HP = myHP
+        self.__speed = mySpeed
     
     def setName(self, myName):
         self.__name = myName
@@ -45,16 +46,16 @@ class Pokemon():
     def getHP(self):
         return self.__HP
     
+    def setSpeed(self,mySpeed):
+        self.__speed = mySpeed
+    
+    def getSpeed(self):
+        return self.__speed
+    
     
 class Water(Pokemon):
-    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP):
-        super().__init__(myName, myType, myWeight, myHeight, mySound, myHP)
-        self.__name = myName
-        self.__type = myType
-        self.__weight = myWeight
-        self.__height = myHeight
-        self.__sound = mySound
-        self.__HP = myHP
+    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP, mySpeed):
+        super().__init__(myName, myType, myWeight, myHeight, mySound, myHP, mySpeed)
         self.__element = "Water"
     
     def setElement(self):
@@ -63,20 +64,113 @@ class Water(Pokemon):
     def getElement(self):
         return self.__element
 
+def attack(poke2_HP, speed2):
+    print("Attack list:")
+    print("____________________")
+    print("Attack 1 - Plastic Bag, Deals 1 damage, lowers enemy speed")
+    print("Attack 2 - Straw, Deals 1-2 damage, Super effective against water pokemon")
+    print("Attack 3 - Microplastics, Lowers enemy speed by 5")
+    print("Attack 4 - FUCK YOU! ")
+    choice = int(input("Enter attack number: "))
+    if choice == 1:
+        print(f"{firstPokemon.getName()} used Plastic Bag!")
+        poke2_HP -= 1
+        speed2 -= 3
+        print(f"{firstWater.getName()}'s speed fell and it took 1 damage.")
+        return poke2_HP, speed2
+
+    elif choice == 2:
+        print(f"{firstPokemon.getName()} used Straw!")
+        if firstWater.getElement() == "Water":
+            poke2_HP = poke2_HP - random.randint(2,4)
+            print(f"{firstWater.getName()} has {poke2_HP} health remaining!")
+            return poke2_HP, speed2
+        else:
+            poke2_h -= random.randint(1,2)
+            print(f"{firstWater.getName()} has {poke2_HP} health remaining!")
+            return poke2_HP, speed2
+        
+    elif choice == 3:
+        print(f"{firstPokemon.getName()} used Microplastics!")
+        speed2 -= 5
+        print(f"{firstWater.getName()}'s speed decreased!")
+        return poke2_h, speed2
+    
+    elif choice == 4:
+        poke2_HP = 0
+        return poke2_HP, speed2
+        
+    else:
+        print("That was not in the move list")
+        choice = int(input("Enter attack number: "))        
+
+def attacked(poke1_h,poke2_h):
+    move = random.randint(1,3)
+    torrent = False
+    if move == 1:
+        print(f"{firstWater.getName()} used torrent. It's attack rose!")
+        return torrent == True
+        
+    elif move == 2:
+        print(f"{firstWater.getName()} used bubble beam!")
+        if torrent == True:
+            poke1_h -= random.randint(1,3)
+            print(f"{firstPokemon.getName()} has {poke1_h} remaining!")
+            return poke1_h 
+        else:
+            poke1_h -= random.randint(1,3)
+            print(f"{firstPokemon.getName()} has {poke1_h} remaining!")
+            return poke1_h 
+
+    elif move == 3:
+        poke2_h = poke2_h + ((1/16) * poke2_h)
+        print(f"{firstWater.getName()} used rain dish. It's health recovered to {poke2_h}")
+        return poke2_h
         
 
-firstPokemon = Pokemon("","","","","","")
+firstPokemon = Pokemon("","","","","","","")
 firstPokemon.setName("plonker")
 firstPokemon.setType("plastic")
 firstPokemon.setWeight("2lbs")
-firstPokemon.setHeight("2ft")
+firstPokemon.setHeight("0.6m")
 firstPokemon.setSound("oong")
+firstPokemon.setHP(46594857645)
+firstPokemon.setSpeed(50)
 
-firstWater = Water("","","","","","")
+firstWater = Water("","","","","","","")
+firstWater.setName("Squirtle")
+firstWater.setType("Tiny turtle")
+firstWater.setWeight("9kg")
+firstWater.setHeight("0.5m")
+firstWater.setSound("squir-")
+firstWater.setHP(6)
+firstWater.setSpeed(49)
 
-
+print("first pokemon \n")
 for attribute, value in firstPokemon.__dict__.items():
     print(attribute,value)
+print("\n")
+print("Second pokemon\n")
+for attribute, value in firstWater.__dict__.items():
+    print(attribute,value)
 
+# combat
+
+poke1_h = firstPokemon.getHP()
+poke2_h = firstWater.getHP()
+speed1 = firstPokemon.getSpeed()
+speed2 = firstWater.getSpeed()
+
+while poke1_h > 0 and poke2_h > 0:
+    
+    if speed1 > speed2:
+        poke2_h, sped = attack(poke2_h,speed2)
+        print(f"{poke2_h} health")
+        print(f"{sped} speed")
+        attacked(poke1_h,poke2_h)
+    
+    if speed2 > speed1:
+        attacked(poke1_h,poke2_h)
+        attack(poke2_h,speed2)
 for attribute, value in firstWater.__dict__.items():
     print(attribute,value)
