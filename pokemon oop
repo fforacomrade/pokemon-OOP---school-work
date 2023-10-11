@@ -70,7 +70,7 @@ def attack(poke2_HP, speed2):
     print("Attack 1 - Plastic Bag, Deals 1 damage, lowers enemy speed")
     print("Attack 2 - Straw, Deals 1-2 damage, Super effective against water pokemon")
     print("Attack 3 - Microplastics, Lowers enemy speed by 5")
-    print("Attack 4 - FUCK YOU! ")
+    print("Attack 4 - SCREW YOU! ")
     choice = int(input("Enter attack number: "))
     if choice == 1:
         print(f"{firstPokemon.getName()} used Plastic Bag!")
