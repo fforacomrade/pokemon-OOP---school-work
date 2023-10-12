@@ -1,7 +1,13 @@
 import random
 
+reqEXP = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22000, 24000, 26000, 28000, 30000, 32000,
+          34000, 36000, 38000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000, 80000, 85000, 90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000]
+
+
+# creating a base template for a pokemon
 class Pokemon():
-    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP, mySpeed): 
+    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP, mySpeed, myEXP, myLevel): 
+        # encapsulation via .__
         self.__name = myName
         self.__type = myType
         self.__weight = myWeight
@@ -9,7 +15,11 @@ class Pokemon():
         self.__sound = mySound
         self.__HP = myHP
         self.__speed = mySpeed
+        self.__exp = myEXP
+        
     
+    # getting/setting the attributes
+
     def setName(self, myName):
         self.__name = myName
     
@@ -51,11 +61,31 @@ class Pokemon():
     
     def getSpeed(self):
         return self.__speed
+
+    def setEXP(self,myEXP):
+        self.__exp = myEXP
+    
+    def getEXP(self):
+        return self.__exp
+    
+    def setLevel(self,myLevel):
+        self.__level = myLevel
+    
+    def getLevel(self):
+        return self.__level
+    
+    def increaseEXP(self):
+        if self.__exp > reqEXP[0]:
+            self.__level += 1
+            self.__HP += random.randint(3,5)
+            reqEXP.pop(0)
+
     
     
+# inheritance    
 class Water(Pokemon):
-    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP, mySpeed):
-        super().__init__(myName, myType, myWeight, myHeight, mySound, myHP, mySpeed)
+    def __init__(self, myName, myType, myWeight, myHeight, mySound, myHP, mySpeed, myEXP, myLevel):
+        super().__init__(myName, myType, myWeight, myHeight, mySound, myHP, mySpeed, myEXP, myLevel)
         self.__element = "Water"
     
     def setElement(self):
@@ -67,23 +97,25 @@ class Water(Pokemon):
 def attack(poke2_HP, fspeed2):
     print("Attack list:")
     print("____________________")
-    print("Attack 1 - Plastic Bag, Deals 1 damage, lowers enemy speed")
+    print("Attack 1 - Plastic Bag, Deals 1 damage, lowers enemy speed - can't be lower than zero")
     print("Attack 2 - Straw, Deals 1-2 damage, Super effective against water pokemon")
-    print("Attack 3 - Microplastics, Lowers enemy speed by 5")
+    print("Attack 3 - Microplastics, Lowers enemy speed by 5 - can't be lower than zero")
     print("Attack 4 - SCREW YOU! ")
     choice = int(input("Enter attack number: "))
     if choice == 1:
         print(f"{firstPokemon.getName()} used Plastic Bag!")
         poke2_HP -= 1
         firstWater.setHP(poke2_HP)
-        if fspeed2 > 0:
+        if fspeed2 > 3:
             fspeed2 -= 3
             firstWater.setSpeed(fspeed2)
             print(f"{firstWater.getName()}'s speed fell and it took 1 damage.")
             return poke2_HP, fspeed2
         else:
+            print(f"{firstWater.getName()} took 1 damage.")
             return poke2_HP, fspeed2
-
+        
+            
 
     elif choice == 2:
         print(f"{firstPokemon.getName()} used Straw!")
@@ -100,14 +132,14 @@ def attack(poke2_HP, fspeed2):
         
     elif choice == 3:
         print(f"{firstPokemon.getName()} used Microplastics!")
-        if fspeed2 > 0:
+        if fspeed2 > 5:
             fspeed2 -= 5
             firstWater.setSpeed(fspeed2)
             print(f"{firstWater.getName()}'s speed decreased!")
             return poke2_HP, fspeed2
         else:
+            print("It did nothing!")
             return poke2_HP, fspeed2
-
     
     elif choice == 4:
         poke2_HP = 0
@@ -146,17 +178,21 @@ def attacked(poke1_h,poke2_h):
         else:
             return poke2_h
         
+# instantiating
 
-firstPokemon = Pokemon("","","","","","","")
-firstPokemon.setName(input("What is your pokemons name"))
+firstPokemon = Pokemon("","","","","","","","","")
+firstPokemon.setName(input("What is your pokemons name: "))
 firstPokemon.setType("plastic")
 firstPokemon.setWeight(input("How heavy is it: "))
 firstPokemon.setHeight(input("How tall is it: "))
 firstPokemon.setSound(input("What noise does it make: "))
 firstPokemon.setHP(1000000)
 firstPokemon.setSpeed(50)
+firstPokemon.setEXP(0)
+firstPokemon.setLevel(1)
 
-firstWater = Water("","","","","","","")
+
+firstWater = Water("","","","","","","","","")
 firstWater.setName("Squirtle")
 firstWater.setType("Tiny turtle")
 firstWater.setWeight("9kg")
@@ -164,6 +200,9 @@ firstWater.setHeight("0.5m")
 firstWater.setSound("squir-")
 firstWater.setHP(6)
 firstWater.setSpeed(49)
+firstWater.setEXP(0)
+firstWater.setLevel(1)
+
 
 print("first pokemon \n")
 for attribute, value in firstPokemon.__dict__.items():
@@ -174,11 +213,11 @@ for attribute, value in firstWater.__dict__.items():
     print(attribute,value)
 
 # combat
-
+play = input("Want to play? ")
 poke1_h = firstPokemon.getHP()
 poke2_h = firstWater.getHP()
 
-
+while play == "Y":
 while poke1_h > 0 and poke2_h > 0:
     
     poke1_h = firstPokemon.getHP()
@@ -204,3 +243,6 @@ if poke1_h <= 0:
 
 if poke2_h <= 0:
     print(f"{firstWater.getName()} is dead lmao")
+    EXPgain = random.randint(50,100)
+    firstPokemon.setEXP(firstPokemon.getEXP() + EXPgain)
+    print(f"{firstPokemon.getName()} gained {EXPgain}EXP!")
