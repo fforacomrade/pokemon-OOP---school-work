@@ -1,6 +1,6 @@
 import random
 
-reqEXP = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22000, 24000, 26000, 28000, 30000, 32000,
+reqEXP = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22000, 24000, 26000, 28000, 30000, 32000,
           34000, 36000, 38000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000, 80000, 85000, 90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000]
 
 
@@ -73,12 +73,6 @@ class Pokemon():
     
     def getLevel(self):
         return self.__level
-    
-    def increaseEXP(self):
-        if self.__exp > reqEXP[0]:
-            self.__level += 1
-            self.__HP += random.randint(3,5)
-            reqEXP.pop(0)
 
     
     
@@ -93,6 +87,8 @@ class Water(Pokemon):
     
     def getElement(self):
         return self.__element
+
+# creating self attacks
 
 def attack(poke2_HP, fspeed2):
     print("Attack list:")
@@ -148,6 +144,8 @@ def attack(poke2_HP, fspeed2):
     else:
         print("That was not in the move list")
         choice = int(input("Enter attack number: "))        
+
+# creating enemy move list
 
 def attacked(poke1_h,poke2_h):
     move = random.randint(1,3)
@@ -213,36 +211,79 @@ for attribute, value in firstWater.__dict__.items():
     print(attribute,value)
 
 # combat
-play = input("Want to play? ")
+play = True
 poke1_h = firstPokemon.getHP()
 poke2_h = firstWater.getHP()
+totalEXP = 0
+enemies_killed = 0
 
-while play == "Y":
-while poke1_h > 0 and poke2_h > 0:
+
+while play == True:
+    while poke1_h > 0 and poke2_h > 0:
     
-    poke1_h = firstPokemon.getHP()
-    poke2_h = firstWater.getHP()
-    speed1 = firstPokemon.getSpeed()
-    speed2 = firstWater.getSpeed()
-
-    if speed1 > speed2:
-        poke2_h, sped = attack(poke2_h,speed2)
-        print(f"{poke2_h} health")
-        print(f"{sped} speed")
-        if poke2_h > 0:
+        poke1_h = firstPokemon.getHP()
+        poke2_h = firstWater.getHP()
+        speed1 = firstPokemon.getSpeed()
+        speed2 = firstWater.getSpeed()
+    
+        if speed1 > speed2:
+            poke2_h, sped = attack(poke2_h,speed2)
+            print(f"{poke2_h} health")
+            print(f"{sped} speed")
+            if poke2_h > 0:
+                attacked(poke1_h,poke2_h)
+            else:
+                pass
+        
+        if speed2 > speed1:
             attacked(poke1_h,poke2_h)
-        else:
-            pass
+            attack(poke2_h,speed2)
     
-    if speed2 > speed1:
-        attacked(poke1_h,poke2_h)
-        attack(poke2_h,speed2)
-
-if poke1_h <= 0:
-    print(f"{firstPokemon.getName()} is dead lmao")
-
-if poke2_h <= 0:
-    print(f"{firstWater.getName()} is dead lmao")
-    EXPgain = random.randint(50,100)
-    firstPokemon.setEXP(firstPokemon.getEXP() + EXPgain)
-    print(f"{firstPokemon.getName()} gained {EXPgain}EXP!")
+    # checks health of pokemon, changes play condition if "first.Pokemon" is dead 
+    
+    if poke1_h <= 0:
+        print(f"{firstPokemon.getName()} is dead lmao")
+        play == False
+    
+    if poke2_h <= 0:
+        print(f"{firstWater.getName()} is dead lmao")
+        enemies_killed += 1
+        
+        # exp increment
+        EXPgain = random.randint(500,1000)
+        totalEXP += EXPgain
+        firstPokemon.setEXP(firstPokemon.getEXP() + EXPgain)
+        EXPcurrent = firstPokemon.getEXP()
+        print(f"{firstPokemon.getName()} gained {EXPgain}EXP!")
+        #print(f"{totalEXP} total EXP") - test to make sure EXP doesn't lose value
+        
+        # checking for new level
+        if EXPcurrent > reqEXP[0]:
+            LevelCurrent = firstPokemon.getLevel()
+            firstPokemon.setLevel(LevelCurrent + 1)
+            print(f"{firstPokemon.getName()} is now level {firstPokemon.getLevel()}")
+            reqEXP.pop(0) # .pop removes (index) from list
+        
+        if enemies_killed <= 5:    
+            poke2_h = 6                #
+            firstWater.setHP(6)        # - creates new squirtle with same atrributes after death
+            firstWater.setSpeed(49)    #
+        
+        if enemies_killed > 5:
+            poke2_h = 120
+            firstWater.setHP(120)
+            firstWater.setSpeed(49)
+            
+        if enemies_killed > 15:
+            poke2_h = 2400
+            firstWater.setHP(2400)
+            firstWater.setSpeed(49)
+        
+        if enemies_killed > 60:
+            print("how on earth did you make it here?")
+            print("well congrats, you have massacred the entire squirtle population")
+        
+##### finns idea for a stupid pokemon
+# attack 1 - malnutrition
+# attack 2 - unicef support
+# attack 3 - madonnas child
